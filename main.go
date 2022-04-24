@@ -20,6 +20,9 @@ const (
 //go:embed nextjs/out/*
 var nextjs embed.FS
 
+//go:embed material-kit-react/out/*
+var mkr embed.FS
+
 type hdr struct {
 	parent string
 	h      http.Handler
@@ -42,6 +45,7 @@ func Start() {
 		e.GET(prefix+"*", echo.WrapHandler(http.StripPrefix(prefix, hdr{parent: parent, h: http.FileServer(http.FS(fs))})))
 	}
 	serve("/nextjs", "nextjs/out/", nextjs)
+	serve("/material-kit-react", "material-kit-react/out/", mkr)
 
 	log.Printf("start listening at %s", viper.GetString(KeyPort))
 	log.Fatal(e.Start(viper.GetString(KeyPort)))
